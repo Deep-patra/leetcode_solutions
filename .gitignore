@@ -3,3 +3,6 @@
 
 # compiled files
 *.exe
+
+# generated files
+generated_ouput.txt

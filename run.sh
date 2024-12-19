@@ -50,5 +50,12 @@ clang++ -o $executableFile $mainFile
 echo -e "\e[34mCompiled!\e[0m"
 echo -e "\e[32mRunning the $executableFile\e[0m\n\n"
 
+generatedOutput="$path/generated_output.txt"
+
 # Run the executable with inputs
-./$executableFile < $inputFile 
+./$executableFile < $inputFile > $generatedOutput
+
+echo -e "\e[33mChecking the Outputs ....\e[0m"
+
+# check if both outputs are the smae
+./$checkOutFile $generatedOutput $outputFile
