@@ -12,6 +12,8 @@ int max_chunks_to_make_sorted(vector<int> nums) {
     - Increase the paritions by 1, when there is a unsorted elements.
   **/
 
+  // FIX: This algorithm doesn't work for [1, 2, 0, 3, 4]
+
   int partitions = 1;
 
   int max_num = INT_MIN; // maximum number in the patition

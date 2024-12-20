@@ -5,4 +5,4 @@
 *.exe
 
 # generated files
-**/generated_ouput.txt
+**/**/generated_output.txt

@@ -20,9 +20,9 @@ fi
 checkOutFile="checkOutput.exe" # Executable 
 checkOutCpp="checkOutput.cpp" # Source file
 
-if [ ! -e $checkOutFile ]; then
+if [ ! -e "./$checkOutFile" ]; then
   echo -e "\e[33mCheckOutput Executable is not present... Generating \e[0m"
-  clang++ -o $checkOutFile ./checkOutput.cpp
+  clang++ -o $checkOutFile ./$checkOutCpp
 fi
 
 # path to the directory
