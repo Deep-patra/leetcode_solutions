@@ -1,8 +1,9 @@
+#include <deque>
 #include <iostream>
 #include <vector>
 using namespace std;
 
-typdef struct ListNode {
+typedef struct ListNode {
   int val;
   ListNode *next;
 
@@ -15,8 +16,11 @@ public:
 ListNode *generate_list(vector<int> nums) {
   ListNode *head = new ListNode(nums[0]);
 
-  for (int i = 1; i < nums.size(); i++)
-    head->next = new ListNode(nums[i]);
+  ListNode *curr = head;
+  for (int i = 1; i < nums.size(); i++) {
+    curr->next = new ListNode(nums[i]);
+    curr = curr->next;
+  }
 
   return head;
 }
@@ -26,15 +30,45 @@ void print_list(ListNode *head) {
   while (curr != nullptr) {
     cout << curr->val << " ";
 
-    curr = curr->head;
+    curr = curr->next;
   }
+
+  cout << '\n';
 }
 
-ListNode *rotate_right(ListNode *head, int k) {
-  ListNode *new_head = head, prev, curr = head;
+// FIX: Optimize the algorithm for Time Limit Exceeded
+ListNode *rotate_list(ListNode *head, int k) {
+  if (head == nullptr)
+    return nullptr;
 
-  while (k != 0) {
+  deque<ListNode *> dq;
+
+  ListNode *curr = head;
+  while (curr != nullptr) {
+    dq.push_back(curr);
+    curr = curr->next;
   }
+
+  // rotate the deque
+  for (int i = 0; i < k; i++) {
+    // pop the item from the back and push it on the front
+    ListNode *temp = dq.back();
+    dq.pop_back();
+    dq.push_front(temp);
+  }
+
+  ListNode *new_head = dq.front();
+  dq.pop_front();
+
+  ListNode *current_node = new_head;
+  while (!dq.empty()) {
+    current_node->next = dq.front();
+    dq.pop_front();
+
+    current_node = current_node->next;
+  }
+
+  current_node->next = nullptr;
 
   return new_head;
 }
@@ -47,22 +81,17 @@ int main() {
     testcases--;
 
     int len, k;
-    cin >> len;
-    cin >> k;
+    cin >> len >> k;
 
-    vector<int> nums;
-    for (int i = 0; i < len; i++) {
-      int num;
-      cin >> num;
-
-      nums.push_back(num);
-    }
+    vector<int> nums(len, 0);
+    for (int i = 0; i < len; i++)
+      cin >> nums[i];
 
     ListNode *head = generate_list(nums);
 
-    ListNode *new_head = rotate_list(head);
+    ListNode *new_head = rotate_list(head, k);
 
-    print_list(head);
+    print_list(new_head);
   }
 
   return 0;
