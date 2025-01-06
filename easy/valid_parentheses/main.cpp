@@ -1,51 +1,64 @@
 #include <iostream>
+#include <stack>
 using namespace std;
 
-// FIX: doesn't pass all the testcases
 bool is_valid(string s) {
-  int round_brac = 0, square_brac = 0, curly_brac = 0;
+
+  if (s.length() == 1)
+    return false;
+
+  stack<char> state;
+
+  int round = 0, square = 0, curly = 0;
 
   for (int i = 0; i < s.length(); i++) {
-    char ch = s[i];
 
-    switch (ch) {
+    switch (s[i]) {
     case '(': {
-      round_brac++;
+      state.push('(');
+      round++;
       break;
     }
     case ')': {
-      if (round_brac == 0)
+      if (state.empty() || state.top() != '(')
         return false;
 
-      round_brac--;
-      break;
-    }
-    case '[': {
-      square_brac++;
-      break;
-    }
-    case ']': {
-      if (square_brac == 0)
-        return false;
+      state.pop();
+      round--;
 
-      square_brac--;
       break;
     }
     case '{': {
-      curly_brac++;
+      state.push('{');
+      curly++;
       break;
     }
     case '}': {
-      if (curly_brac == 0)
+      if (state.empty() || state.top() != '{')
         return false;
 
-      curly_brac--;
+      state.pop();
+      curly--;
+
+      break;
+    }
+    case '[': {
+      state.push('[');
+      square++;
+      break;
+    }
+    case ']': {
+      if (state.empty() || state.top() != '[')
+        return false;
+
+      state.pop();
+      square--;
       break;
     }
     }
   }
 
-  if (round_brac != 0 || square_brac != 0 || curly_brac != 0)
+  if (!state.empty() || round != 0 || curly != 0 || square != 0)
     return false;
 
   return true;
