@@ -3,29 +3,28 @@
 using namespace std;
 
 int search_insert(vector<int> &nums, int target) {
+  int low = 0, high = nums.size() - 1;
 
-  if (nums.size() == 1) {
-    return nums[0] > target ? 0 : 1;
-  }
+  if (target < nums[0])
+    return 0;
 
-  int low = 0;
-  int high = nums.size() - 1;
+  else if (target > nums[nums.size() - 1])
+    return nums.size();
 
-  int mid = low + (high - low) / 2;
-
-  while (low < high) {
-    mid = low + (high - low) / 2;
+  while (low <= high) {
+    int mid = low + (high - low) / 2;
 
     if (nums[mid] == target)
       return mid;
 
-    if (nums[mid] < target)
+    if (nums[mid] > target)
+      high = mid - 1;
+
+    else if (nums[mid] < target)
       low = mid + 1;
-    else
-      high = mid;
   }
 
-  return mid;
+  return low;
 }
 
 int main() {
@@ -38,11 +37,8 @@ int main() {
   while (testcases > 0) {
     testcases--;
 
-    int target;
-    cin >> target;
-
-    int len;
-    cin >> len;
+    int target, len;
+    cin >> target >> len;
 
     vector<int> nums;
     for (int i = 0; i < len; i++) {

@@ -34,7 +34,7 @@ int max_coins_recurse(vector<int> nums, vector<bool> bursted) {
   return result;
 }
 
-// INFO: Time Complexity will be N^3, Space Complexity will be N^3
+
 int max_coins(vector<int> nums) {
   int len = nums.size();
 

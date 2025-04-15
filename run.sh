@@ -45,7 +45,7 @@ echo -e "\e[32mCompiling the main file\e[0m"
 executableFile="$path/main.exe"
 
 # Compile the main.cpp file with clang
-clang++ -o $executableFile $mainFile
+clang++ -fsanitize=address -fno-omit-frame-pointer -O1 -o $executableFile $mainFile
 
 echo -e "\e[34mCompiled!\e[0m"
 echo -e "\e[32mRunning the $executableFile\e[0m\n\n"

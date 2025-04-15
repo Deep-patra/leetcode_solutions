@@ -2,6 +2,8 @@
 #include <vector>
 using namespace std;
 
+int dp[10001][26];
+
 vector<vector<string>> group_anagrams(vector<string> &strs) {}
 
 int main() {

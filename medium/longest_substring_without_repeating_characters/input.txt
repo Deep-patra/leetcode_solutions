@@ -1,6 +1,2 @@
-5
-abcabcbb
-bbbbb
-pwwkew
-dvdf
-asjrgapa
+1
+abba

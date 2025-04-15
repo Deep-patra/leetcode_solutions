@@ -6,6 +6,9 @@
 
 # generated files
 **/generated_output.txt
+**/main.pdb
+**/main.lib
+**/main.exp
 
 # todo 
 todo.md

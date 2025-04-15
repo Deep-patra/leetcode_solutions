@@ -1,9 +1,33 @@
 #include <iostream>
 using namespace std;
 
-// INFO: Sliding window technique
 int longest_substring(string s) {
-  return 0;
+  
+  int ch[256];
+  memset(ch, -1, sizeof(ch));
+
+  int l = 0, r = 0, max_len = 1;
+
+  while (r < s.length()) {
+
+    int c = s[r] - 'a';
+
+    if (ch[c] != -1) {
+      int end = ch[c] + 1;
+
+      while (l < end) {
+        ch[s[l]] = -1;
+        l ++;
+      }
+    }
+
+    max_len = max(max_len, (r + 1) - l);
+    
+    ch[c] = r;
+    r ++;
+  }
+
+  return max_len;
 }
 
 int main() {

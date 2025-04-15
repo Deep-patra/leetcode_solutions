@@ -1,0 +1,6 @@
+5
+aeioqq 1
+aeiou 0
+ieaouqqieaouqq 1
+aeueio 0
+aoaiuefi 1

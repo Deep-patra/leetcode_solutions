@@ -36,7 +36,79 @@ void print_list(ListNode *head) {
   cout << '\n';
 }
 
-ListNode* reverse_k_group(ListNode* head, int k) {}
+int get_size(ListNode* head) {
+  int size = 0;
+  ListNode* curr = head;
+
+  while (curr != nullptr) {
+    size ++;
+    curr = curr->next;
+  }
+
+  return size;
+}
+
+ListNode* reverse(ListNode* start, ListNode* end) {
+  ListNode* next = end->next, *head = end, *last = end, *curr = start;
+
+  while (last != start) {
+    
+    while (curr->next != last) 
+      curr = curr->next;
+
+    last->next = curr;
+    last = curr;
+
+    curr = start;
+  }
+
+  start->next = next;
+
+  return head;
+}
+
+
+ListNode* reverse_k_group(ListNode* head, int k) {
+
+  if (k == 1) return head;
+
+  int size = get_size(head);
+
+  ListNode* next, *end, *curr = head, *start = head, *prev = head;
+
+  int i = 1;
+  while (curr != nullptr && i <= k) {
+    i++;
+    curr = curr->next;
+  }
+  
+  next = curr->next;
+  head = reverse(start, curr);
+
+  if ((size / k) == 1) return head;
+
+  size -= k;
+  curr = next;
+  start = next;
+
+  while (curr != nullptr && size >= k) {
+    i = 1;
+    while (curr != nullptr && i <= k) {
+      i ++;
+      curr = curr->next;
+    }
+
+    next = curr->next;
+    end = curr;
+    
+    prev->next = reverse(start, curr);
+
+    curr = next;
+    size -= k;
+  }
+
+  return head;
+}
 
 int main() {
   int testcases;
