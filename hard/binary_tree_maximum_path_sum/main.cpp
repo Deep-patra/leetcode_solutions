@@ -12,21 +12,49 @@ struct TreeNode {
 };
 
 TreeNode *generate_tree(vector<int> &values, int idx = 0) {
-  if (idx >= values.size() && values[idx] == NULL)
+  if (values.size() == 0 || idx >= values.size() || values[idx] == NULL)
     return nullptr;
 
   return new TreeNode(values[idx], generate_tree(values, 2 * idx + 1),
                       generate_tree(values, 2 * idx + 2));
 }
 
-int find_max_path_sum(unordered_map<TreeNode *, int> &m, TreeNode *root,
-                      int &result) {
+// TODO: Works! But is a bit slow, Implement a efficient algorithm, than the current one.
+void find_max_path_sum(unordered_map<TreeNode *, int> &m, TreeNode *root,
+                       int &result) {
   if (root == nullptr)
-    return 0;
+    return;
+
+  if (m.find(root) != m.end())
+    return;
 
   int val = root->val;
 
-  if (root->left != nullptr)
+  int res = val, max_val = INT_MIN;
+
+  if (root->left != nullptr) {
+    find_max_path_sum(m, root->left, result);
+
+    max_val = max(max_val, m[root->left]);
+
+    if (m[root->left] > 0)
+      res += m[root->left];
+  }
+
+  if (root->right != nullptr) {
+    find_max_path_sum(m, root->right, result);
+
+    max_val = max(max_val, m[root->right]);
+
+    if (m[root->right] > 0)
+      res += m[root->right];
+  }
+
+  result = max(result, res);
+
+  m[root] = max_val + val;
+
+  return;
 }
 
 int max_path_sum(TreeNode *root) {
@@ -49,8 +77,12 @@ int main() {
     cin >> n;
 
     vector<int> values(n);
-    for (int i = 0; i < n; i++)
-      cin >> values[i];
+    for (int i = 0; i < n; i++) {
+      string s;
+      cin >> s;
+
+      values[i] = s == "null" ? NULL : stoi(s);
+    }
 
     TreeNode *root = generate_tree(values);
 
