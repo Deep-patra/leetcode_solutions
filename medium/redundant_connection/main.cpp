@@ -1,55 +1,39 @@
-#include <iostream>
-#include <stack>
-#include <vector>
+#include <bits/stdc++.h>
 using namespace std;
 
-// TODO: Complete The Implementation of the Solution
+int find(vector<int> &parents, int i) {
 
-bool dfs(vector<vector<int>> adj, vector<int> &parent, vector<bool> &visited,
-         int &cycle_vertex, int u) {
-  visited[u] = 1;
+  if (parents[i] != i)
+    return parents[i] = find(parents, parents[i]);
 
-  for (int i = 0; i < adj[u].size(); i++) {
-    int v = adj[u][i];
+  return parents[i];
+}
 
-    if (visited[v]) {
-      cycle_vertex = v;
-      return true;
-    }
+void ds_union(vector<int> &parents, int i, int j) {
+  int f = find(parents, i), s = find(parents, j);
 
-    parent[v] = u;
-
-    if (dfs(adj, parent, visited, cycle_vertex, v))
-      return true;
-  }
-
-  return false;
+  if (f < s)
+    parents[s] = f;
+  else
+    parents[f] = s;
 }
 
 vector<int> find_redundant_connection(vector<vector<int>> &edges) {
-  vector<vector<int>> adj(edges.size() + 1, vector<int>(0));
+
+  vector<int> parents(edges.size(), -1);
 
   for (int i = 0; i < edges.size(); i++)
-    adj[edges[i][0]].push_back(edges[i][1]);
+    parents[i] = i;
 
-  vector<bool> visited(edges.size() + 1, 0);
-  vector<int> parent(edges.size() + 1, -1);
+  for (auto &edge : edges) {
 
-  int cycle_vertex = -1;
-  dfs(adj, parent, visited, cycle_vertex, 1);
+    if (find(parents, edge[0] - 1) == find(parents, edge[1] - 1))
+      return edge;
 
-  visited = vector<bool>(edges.size() + 1, 0);
-  for (int i = cycle_vertex; i <= edges.size(); i = parent[i])
-    visited[i] = 1;
+    ds_union(parents, edge[0] - 1, edge[1] - 1);
+  }
 
-  vector<int> result;
-  for (int i = edges.size() - 1; i >= 0; i--)
-    if (visited[edges[i][0]] && visited[edges[i][1]]) {
-      result = edges[i];
-      break;
-    }
-
-  return result;
+  return edges.back();
 }
 
 int main() {

@@ -3,6 +3,8 @@ using namespace std;
 
 vector<vector<string>> solve_n_queens(int n) {
 
+  
+
 }
 
 int main() {

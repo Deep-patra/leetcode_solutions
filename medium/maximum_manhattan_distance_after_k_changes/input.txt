@@ -1,0 +1,4 @@
+3
+NWSE 1
+NSWWEW 3
+ENNSW 1

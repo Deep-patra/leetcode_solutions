@@ -3,61 +3,32 @@ using namespace std;
 
 const double EPSILON = numeric_limits<double>::epsilon();
 
-// TODO: Complete the implementation
-// INFO: MIGHT USE RANGE DP
 double largest_sum_of_averages(vector<int> &nums, int k) {
+  int n = nums.size();
 
-  double l, h, sum = 0;
+  vector<vector<double>> dp(n, vector<double>(k + 1, 0));
 
-  for (int val : nums)
-    sum += val;
+  vector<int> pref(n + 1, 0);
+  for (int i = 0; i < n; i++)
+    pref[i + 1] = pref[i] + nums[i];
 
-  h = sum;
-  l = sum / nums.size();
+  for (int i = 0; i < n; i++)
+    dp[i][1] = ((double)(pref[i + 1]) / (double)(i + 1));
 
-  if (k == 1)
-    return h;
+  for (int j = 2; j <= k; j++) {
+    for (int i = j - 1; i < n; i++) {
 
-  else if (k == nums.size())
-    return l;
+      double max_avg = 0.0;
 
-  auto is_possible = [&](double avg) -> int {
-    int res = 0, start = 0, sum = 0;
+      for (int p = j - 1; p <= i; p++)
+        max_avg = max(max_avg, dp[p - 1][j - 1] + (double)(pref[i + 1] - pref[p]) /
+                                                  (double)((i - p) + 1));
 
-    for (int i = 0; i < nums.size(); i++) {
-      sum += nums[i];
-
-      double a = (double)(sum / (i - start + 1));
-
-      if (a > avg) {
-        res++;
-
-        start = i;
-        sum = nums[i];
-      }
+      dp[i][j] = max_avg;
     }
-
-    if (sum > 0)
-      res++;
-
-    cout << "avg => " << avg << " res => " << res << endl;
-
-    return res <= k ? 1 : 0;
-  };
-
-  double result = sum;
-
-  while (l <= h) {
-    double mid = l + (h - l) / 2;
-
-    if (is_possible(mid)) {
-      result = mid;
-      l = mid + 1;
-    } else
-      h = mid - 1;
   }
 
-  return result;
+  return dp[n - 1][k];
 }
 
 int main() {
